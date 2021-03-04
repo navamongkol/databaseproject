@@ -1,4 +1,5 @@
 from flask import Flask ,request, render_template
+from local import storage
 
 app = Flask(__name__)
 
