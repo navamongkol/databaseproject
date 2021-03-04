@@ -12,7 +12,7 @@ def home():
     cur.execute("SELECT* from Members")
     rows = cur.fetchall()
     print(rows)
-    return jsonify(rows);
+    return jsonify(rows)
 
 if __name__ == "__main__":
     app.run(debug=True)
