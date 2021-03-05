@@ -2,6 +2,7 @@ from flask import Flask ,request, render_template
 from local import storage
 import local as lc
 from query import queryfunc
+import json
 
 app = Flask(__name__)
 
@@ -56,7 +57,13 @@ def addTable():
 
 @app.route('/querytest')
 def test():
-    return str(queryfunc.selectMember())
+    return queryfunc.selectMember()
+
+@app.route('/G1')
+def G1():
+    # data = queryfunc.showparties()
+    # return render_template('G1.html',data = queryfunc.showparties())
+    return queryfunc.showparties()
 
 print("Helloworld")
 # @app.route('/test')
