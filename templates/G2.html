@@ -13,7 +13,7 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
-button {
+a {
   right: 50%;
   background-color: #4CAF50;
   color: white;
@@ -56,17 +56,24 @@ tr:nth-child(even) {
 
 <h1>Party Information</h1>
 
+<div class="center">
+      <tbody>
+        {% for row in datas %}
+        <tr>
+          <td>{{row.1}}</td>
+          <td>{{row.2}}</td>
+          <td>{{row.3}}</td>
+          <td>{{row.4}}</td>
+          <td>
+          </td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </div>
 <div class="container">
-    <div class="center">
-        <h2>Party Name</h2>
-        <h2>Party Leader</h2>
-        <img src="profiletest.jpg" alt="Avatar" class="avatar" height="150">
 
-        <div style="text-align: center;">
-            <img src="profiletest.jpg" alt="Avatar" class="avatar" height="150">
-            <h2>Party Name</h2>
-        </div>
-        
+    <div class="center">
+      
     </div>
 </div>
 <table>
@@ -91,7 +98,7 @@ tr:nth-child(even) {
     <td>67</td>
   </tr>
 </table>
-<button onclick="location.href='G3.html'" type="button">Edit Party</button>
+<a class="btn btn-warning btn-xs" href="{{ url_for('G3') }}">Edit</a>
 
 </div>
 </body>

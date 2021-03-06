@@ -67,73 +67,41 @@ span.psw {
 
 <h1>Edit</h1>
 
-<form action="/action_page.php" method="post">
+<form action={{ url_for('addmember') }} method="post">
 
     <div class="Add member">
-        <h2>Add member</h2>
-        <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Enter member name" name="uname" required>
+        <h2>Add Member</h2>
+        <label for="uname"><b>Name</b></label>
+        <input type="text" placeholder="Enter FirstnameLastname" class="form-control" name="name" required>
 
-        <label for="district"><b>District</b></label>
-        <input type="text" placeholder="Enter member district" name="uname" required>
+        <label for="uname"><b>Position</b></label>
+        <input type="text" placeholder="Enter position" class="form-control" name="position" required>
 
-        <label for="province"><b>Province</b></label>
-        <input type="text" placeholder="Enter member province" name="uname" required>
-        
-        <button onclick="location.href='G2.html'" type="button">
-            Add</button>
+        <label for="uname"><b>Province</b></label>
+        <input type="text" placeholder="Enter Province" class="form-control" name="province" required>
 
-    </div>
-</form>
+        <label for="uname"><b>District</b></label>
+        <input type="text" placeholder="Enter District" class="form-control" name="district" required>
 
-<form action="/action_page.php" method="post">
+        <button href="/G1" type="submit" class="pull-right btn btn-primary">Add</button>
 
-    <div class="Delete member">
-        <h2>Delete member</h2>
-        <label for="id"><b>Id</b></label>
-        <input type="text" placeholder="Enter member Id" name="uname" required>
-
-        <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Enter member name" name="uname" required>
-        
-        <button onclick="location.href='G2.html'" type="button">
-            Delete</button>
 
     </div>
 </form>
 
-<form action="/action_page.php" method="post">
+<form action={{ url_for('deletemember') }} method="post">
 
-    <div class="Member Arrangment">
-        <h2>Member Arrangment</h2>
-        <label for="id"><b>Id</b></label>
-        <input type="text" placeholder="Enter member Id" name="uname" required>
-        
-        <h3>Location:</h3>
-        <label for="District"><b>PartyId</b></label>
-        <input type="text" placeholder="Enter District" name="uname" required>
+    <div class="Delete Member">
+        <h2>Delete Member</h2>
+        <label for="uname"><b>Name</b></label>
+        <input type="text" placeholder="Enter FirstnameLastname" class="form-control" name="name" required>
 
-        <label for="Province"><b>Party name</b></label>
-        <input type="text" placeholder="Enter Province" name="uname" required>
-        
+        <button href="/G1" type="submit" class="pull-right btn btn-primary">Delete</button>
 
-        <h3>To Party:</h3>
-        <label for="partyId"><b>PartyId</b></label>
-        <input type="text" placeholder="Enter partyId" name="uname" required>
-
-        <label for="partyName"><b>Party name</b></label>
-        <input type="text" placeholder="Enter party name" name="uname" required>
-
-        
-        <button onclick="location.href='G2.html'" type="button">
-            Move</button>
 
     </div>
 </form>
 
 
-
-
-</div>
 </body>
 </html>

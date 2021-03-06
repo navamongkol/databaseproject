@@ -13,7 +13,7 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
-button {
+a {
   right: 50%;
   background-color: #4CAF50;
   color: white;
@@ -41,54 +41,41 @@ button {
 
 </style>
 <title>Thailand Electoral 2021</title>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<h2 style="text-align:center;">Welcome,</h2>
-<h2 style="text-align:center;">xxx</h2>
+<h2 style="text-align:center;">Welcome</h2>
+<p style="text-align:center;">{{name}}</p>
+
 <h2 style="text-align:center;">From your province, you are able to make an election with :</h2>
 
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-      <h2>PartyMemberName:</h2>
-    
-  </div>
+<form action={{ url_for('favorite') }} method="post">
+<div style="text-align: center;">
+    {% for row in datas %}
+    <p>PartyName : {{row.1}}</p>
+    <p>MemberName : {{row.2}}</p>
+    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite',PartyId=row.0)}}">Like</a>
+    <hr>
+    {% endfor %}
 </div>
+</form>
 
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-      <h2>PartyMemberName:</h2>    
-  </div>
-</div>
-
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-      <h2>PartyMemberName:</h2>
-    
-  </div>
-</div>
-<div class="container">
-    <h2>Your Favourite(s)</h2>
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-      <h2>PartyMemberName:</h2>
-    
-  </div>
-</div>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>PartyName</th>
+      <th>LeaderName</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+          
+</table>
 
 
-<img src="./C1_files/lineHorizon.png" alt="line">
+<a href="/C2" class="btn btn-primary" type="button">Edit Profile</a>
 
-
-<button onclick="location.href=&#39;C2.html&#39;" type="button">
-         Edit Profile</button>
 
 </body></html>

@@ -73,19 +73,20 @@ span.psw {
   <div class="imgcontainer">
     <img src="CitizenMain.jpg" alt="Avatar" class="avatar">
   </div>
-
+</form>
+<form action={{ url_for('userlogin') }} method="post">
   <div class="container">
     <label for="uname"><b>CitizenId</b></label>
-    <input type="text" placeholder="13-digits" name="citizenid" required>
-
-    <label for="psw"><b>Name</b></label>
-    <input type="text" placeholder="FirstName LastName" name="name" required>
+    <input type="text" placeholder="13-digits" class="form-control" name="citizenid" required>
 
     <label for="uname"><b>BirthDate</b></label>
-    <input type="text" placeholder="dd/mm/yyyy" name="birthdate" required>
+    <input type="text" placeholder="dd/mm/yyyy" class="form-control" name="birthdate" required>
     
-    <button onclick="location.href='C1.html'" type="button">
-         Login</button>
+    <label for="uname"><b>PassWord</b></label>
+    <input type="text" placeholder="password" class="form-control" name="password" required>
+
+    <button href="/C1" type="submit" class="pull-right btn btn-primary">Login</button>
+  
   </div>
 </form>
 

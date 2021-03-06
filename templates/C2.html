@@ -31,26 +31,25 @@ button {
 <body>
 
 <h2 style="text-align:center;">Editing Profile</h2>
-<form action="/action_page.php" method="post">
 
-    <div class="editprofile">
-        <label for="uname"><b>Address</b></label>
-        <input type="text" placeholder="Enter Address" name="uname">
-
-        <label for="uname"><b>Province</b></label>
-        <input type="password" placeholder="Enter Province" name="uname">
-
-        <label for="uname"><b>District</b></label>
-        <input type="password" placeholder="Enter District" name="uname">
-        
-        <label for="uname"><b>Phonenumber</b></label>
-        <input type="password" placeholder="Enter Phonenumber" name="uname">
+<div class="UpdateUser">
+  <form action="{{ url_for('updateuser') }}" method="post">
+    <div class="form-group">
+      <label for="fname">Province</label>
+      <input type="text" placeholder="Enter Leader name" class="form-control"  name="province" required>
     </div>
-
-    <div class="center">
-        <button onclick="location.href='C1.html'" type="button">Save</button>
+    <div class="form-group">
+      <label for="fname">District</label>
+      <input type="text" placeholder="Enter Province" class="form-control"  name="district" required>
     </div>
-
+    <div class="form-group">
+      <label for="fname">Phonenumber</label>
+      <input type="text" placeholder="Enter District" class="form-control"  name="phonenumber" required>
+    </div>
+    <button type="submit" class="pull-right btn btn-primary">Update</button>
+    
+</div>
 </form>
+
 </body>
 </html>

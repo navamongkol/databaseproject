@@ -1,20 +1,13 @@
-from flask import Flask ,request, render_template
+from flask import Flask ,request, render_template, redirect, url_for, session
 from local import storage
-import local as lc
+from local import storage
 from query import queryfunc
 import json
+import sqlite3
 
+LOCAL_DB = 'local.db'
 app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-def government():
-    return render_template('G.html')
-
-def citizen():
-    return render_template('C.html')
+app.secret_key = "super secret key"
 
 @app.route('/tablepositions')
 def getPositions():
@@ -55,19 +48,119 @@ def addTable():
     # storage.insert_favorites()
     return "Success"
 
-@app.route('/querytest')
-def test():
-    return queryfunc.selectMember()
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route('/G1')
-def G1():
-    # data = queryfunc.showparties()
-    # return render_template('G1.html',data = queryfunc.showparties())
-    return queryfunc.showparties()
+@app.route('/main')
+def return_to_homepage():
+    user_id = session['userid']
+    fullname = session['fullname']
+    return render_template('C1.html',datas = queryfunc.showpartiesforuser(user_id),name=fullname)
 
-print("Helloworld")
-# @app.route('/test')
-# def test():
-#     return render_template('index.html')
+@app.route('/G')
+def G():
+    return render_template('G.html')
 
+@app.route('/G1', methods=['POST'])
+def governmentlogin():
+    Role = request.form['role']
+    Password = request.form['password']
+    loginresult = queryfunc.APIloginGovernment(Role, Password)
+    if (loginresult is not None):
+        return render_template('G1.html',datas = queryfunc.APIshowpartiesforgovernment(), top3 = queryfunc.APIshowtopfavorite())
+    else:
+        return "Failed"
+
+@app.route('/G2/<int:PartyId>')
+def G2(PartyId):
+    session['PartyId'] = PartyId
+    print(session['PartyId'])
+    return render_template('G2.html',datas = queryfunc.APIshowpartiesbyid(PartyId))
+
+@app.route('/G3')
+def G3():
+    PartyId = session['PartyId']
+    print(PartyId)
+    return render_template('G3.html')
+
+@app.route('/G4')
+def G4():
+    return render_template('G4.html')
+
+@app.route('/C')
+def C():
+    return render_template('C.html')    
+
+@app.route('/C1', methods=['POST'])
+def userlogin():
+    CitizenId = request.form['citizenid']
+    BirthDate = request.form['birthdate']
+    Password = request.form['password']
+    loginresult = queryfunc.APIloginUser(CitizenId,BirthDate,Password)
+    if (loginresult is not None):
+        session['userid'] = loginresult[0]
+        session['fullname'] = loginresult[1]
+        session['PartyId'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][0]
+        session['PartyName'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][1]
+        print(session['PartyId'],session['PartyName'])
+        return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),name=loginresult[1])
+    else:
+        return 'Failed'
+
+@app.route('/C2')
+def C2():
+    return render_template('C2.html')
+
+@app.route('/insertparty', methods = ['POST'])
+def insertparty():
+    if request.method == 'POST':
+        partyname = request.form['partyname']
+        leadername = request.form['leadername']
+        province = request.form['province']
+        district = request.form['district']
+        queryfunc.APIinsertparty(partyname, leadername, province, district)
+        return "Success"
+
+@app.route('/updateuser', methods = ['POST'])
+def updateuser():
+    Province = request.form['province']
+    District = request.form['district']
+    Phonenumber = request.form['phonenumber']
+    userid = session['userid']
+    queryfunc.APIupdateUser(userid, Province, District, Phonenumber) 
+    return redirect(url_for('return_to_homepage')) 
+
+@app.route('/deleteparty/<int:id>', methods = ['GET'])
+def deleteparty(id):
+    queryfunc.APIdeleteparty(id)
+    return "Success"
+
+@app.route('/addmember', methods = ['POST'])
+def addmember():
+    if request.method == 'POST':
+        partyid = session['PartyId']
+        name = request.form['name']
+        position = request.form['position']
+        province = request.form['province']
+        district = request.form['district']
+        print(type(partyid),type(name),type(position),type(province),type(district))
+        queryfunc.APIaddmember(partyid, name, position, province, district)
+        return "Success"
+
+@app.route('/deletemember', methods = ['POST'])
+def deletemember():
+    if request.method == 'POST':
+        partyid = session['PartyId']
+        name = request.form['name']
+        queryfunc.APIdeletemember(partyid, name)
+        return "Success"
+
+@app.route('/favorite', methods = ['POST'])
+def favorite(PartyId):
+    # partyid = session['PartyId']
+    userid = session['UserId']
+    queryfunc.APIaddfavorite(partyid, userid)
+    queryfunc.APIshowfavorite(userid)
+    return "Success"
 app.run(debug = True)

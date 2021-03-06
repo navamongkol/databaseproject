@@ -41,8 +41,10 @@ class LocalStorage:
                 Name TEXT,
                 AddressId INTEGER,
                 PositionId INTEGER,
+                PartyId INTEGER,
                 FOREIGN KEY (PositionId) REFERENCES Positions(ID),
-                FOREIGN KEY (AddressId) REFERENCES Addresses(ID)
+                FOREIGN KEY (AddressId) REFERENCES Addresses(ID),
+                FOREIGN KEY (PartyId) REFERENCES Parties(ID)
                 )
                 ''')
             
@@ -255,43 +257,43 @@ class LocalStorage:
 
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('ThanathornJuangroongruangkit', 2, 1);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('ThanathornJuangroongruangkit', 2, 1, 1);
                 ''')
 
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('PiyabutrSangkanokul', 2, 2);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PiyabutrSangkanokul', 2, 2, 1);
 
                 ''')
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('KultidaRungruengkiet', 1, 3);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('KultidaRungruengkiet', 1, 3, 1);
                 ''')
 
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('ChumnanJunreuang', 3, 4);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('ChumnanJunreuang', 3, 4, 1);
                 ''')
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('PrayuthJanOCha', 4, 1);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PrayuthJanOCha', 4, 1, 2);
                 ''')
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('PravitWongsuwan', 5, 2);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PravitWongsuwan', 5, 2, 2);
                 ''')
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('AnuchaNakasai', 1, 3);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('AnuchaNakasai', 1, 3, 2);
                 ''')
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId) values ('SontirakSonthijitrawong', 1, 4);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('SontirakSonthijitrawong', 1, 4, 2);
                 ''')
 
             conn.commit()
@@ -350,22 +352,22 @@ class LocalStorage:
 
             cur.execute(
                 '''
-                insert into Logins (Role, UserId, Password) values ('User', 6, 'TCdCUjf1j');
+                insert into Logins (Role, UserId, Password) values ('User', 1, 'TCdCUjf1j');
                 ''')
             
             cur.execute(
                 '''
-                insert into Logins (Role, UserId, Password) values ('User', 1, 'U6fmU9n');
+                insert into Logins (Role, UserId, Password) values ('User', 2, 'U6fmU9n');
                 ''')
 
             cur.execute(
                 '''
-                insert into Logins (Role, UserId, Password) values ('User', 1, 'faZ9Ll1k4');
+                insert into Logins (Role, UserId, Password) values ('User', 3, 'faZ9Ll1k4');
                 ''')
             
             cur.execute(
                 '''
-                insert into Logins (Role, UserId, Password) values ('User', 2, '4n8oTbHc1SbZ');
+                insert into Logins (Role, UserId, Password) values ('User', 4, '4n8oTbHc1SbZ');
                 ''')
             
             cur.execute(
@@ -375,7 +377,7 @@ class LocalStorage:
 
             cur.execute(
                 '''
-                insert into Logins (Role, UserId, Password) values ('User', 2, 's9vQtqlI');
+                insert into Logins (Role, UserId, Password) values ('User', 5, 's9vQtqlI');
                 ''')
 
             cur.execute(

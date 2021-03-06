@@ -36,90 +36,47 @@
         }
     </style>
     <title>Thailand Electoral 2021</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <h1>Top Favorite {{data}}</h1>
+    <h1>Top Favorite</h1>
     <div style="text-align: center;">
-        <div class="1st people">
-            <h2>1st</h2>
-            <img src="คุณญ.หน่อย.jpg" alt="Avatar" width="200" height="200">
-        </div>
-        <div class="text">
-            <h2>Party Name: เพื่อไทย</h2>
-            <h2>Favourite Count: 10,323 &#10084;&#65039;</h2>
-        </div>
+    {% for row in top3 %}
+    <p>PartyName : {{row.0}}</p>
+    <p>MemberName : {{row.1}}</p>
+    <p>FavoriteCount : {{row.2}}</p>
+    
+    <hr>
+    {% endfor %}
+</div>
 
-        <img style="text-align:center;" src="lineHorizon.png" alt="Avatar" width="750">
-    </div>
-
-
-    <div style="text-align: center;">
-        <div class="2nd people">
-            <h2>2nd</h2>
-            <img src="ธนาธร.jpg" alt="Avatar" width="200" height="200">
-        </div>
-        <div class="text">
-            <h2>Party Name: อนาคตใหม่ (FutureForword Party) </h2>
-            <h2>Favourite Count: 8,129 &#10084;&#65039;</h2>
-        </div>
-
-        <img style="text-align:center;" src="lineHorizon.png" alt="Avatar" width="750">
-    </div>
-
-    <div style="text-align: center;">
-        <div class="3rd people">
-            <h2>3rd</h2>
-            <img src="ไอตู่.jpg" alt="Avatar" width="200" height="200">
-        </div>
-        <div class="text">
-            <h2>Party Name: พลังประชารัฐ </h2>
-            <h2>Favourite Count: 999 &#10084;&#65039;</h2>
-        </div>
-
-        <div style="text-align: center;">
-            <img style="text-align:center;" src="lineHorizon.png" alt="Avatar" width="750">
-        </div>
-
-        <div style="text-align: center;">
-            <img style="text-align:center;" src="lineHorizon.png" alt="Avatar" width="750">
-        </div>
-
-        <h1>Parties List</h1>
-
-        <div class="container">
-            <div class="center">
-                <h2>Party Name: เพื่อไทย</h2>
-                <h2>PartyId: 0001</h2>
-                <h2>PartyFav: x10,323 &#10084;&#65039;</h2>
-                <button onclick="location.href='G2N.html'" type="button">
-         Party Detail</button>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="center">
-                <h2>Party Name: อนาคตใหม่ (FutureForword Party)</h2>
-                <h2>PartyId: 0003</h2>
-                <h2>PartyFav: 8,129 &#10084;&#65039;</h2>
-                <button onclick="location.href='G2F.html'" type="button">
-        Party Detail</button>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="center">
-                <h2>Party Name: พลังประชารัฐ</h2>
-                <h2>PartyId: 0002</h2>
-                <h2>PartyFav: 999 &#10084;&#65039;</h2>
-                <button onclick="location.href='G2P.html'" type="button">
-        Party Detail</button>
-            </div>
-        </div>
-
-        <button onclick="location.href='G4.html'" type="button">
-         Add more Party</button>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>PartyName</th>
+          <th>LeaderName</th>
+          <th>FavoriteCount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in datas %}
+        <tr>
+          <td>{{row.2}}</td>
+          <td>{{row.1}}</td>
+          <td>{{row.3}}</td>
+          <td>
+            <a class="btn btn-warning btn-xs" href="{{ url_for('G2', PartyId=row.0) }}">Edit</a>
+            <a href="/deleteparty/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+          </td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <a href="/G4" class="btn btn-primary">Add more Party</a>
 
     </div>
 </body>
