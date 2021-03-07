@@ -56,7 +56,7 @@ def index():
 def return_to_homepage():
     user_id = session['userid']
     fullname = session['fullname']
-    return render_template('C1.html',datas = queryfunc.showpartiesforuser(user_id),name=fullname)
+    return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(user_id),name=fullname)
 
 @app.route('/G')
 def G():
@@ -103,8 +103,14 @@ def userlogin():
         session['fullname'] = loginresult[1]
         session['PartyId'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][0]
         session['PartyName'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][1]
+        session['MemberName'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][2]
+        # PartyName = session['PartyName']
+        # MemberName = session['MemberName']
+        print("MemberName",session['MemberName'])
         print(session['PartyId'],session['PartyName'])
-        return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),name=loginresult[1])
+        return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),
+                                         name=loginresult[1],
+                                         show=queryfunc.APIshowfavorite(loginresult[0]))
     else:
         return 'Failed'
 
@@ -156,11 +162,10 @@ def deletemember():
         queryfunc.APIdeletemember(partyid, name)
         return "Success"
 
-@app.route('/favorite', methods = ['POST'])
+@app.route('/favorite/<int:PartyId>', methods = ['GET','POST'])
 def favorite(PartyId):
-    # partyid = session['PartyId']
-    userid = session['UserId']
-    queryfunc.APIaddfavorite(partyid, userid)
-    queryfunc.APIshowfavorite(userid)
+    userid = session['userid']
+    queryfunc.APIaddfavorite(PartyId, userid)
     return "Success"
+
 app.run(debug = True)

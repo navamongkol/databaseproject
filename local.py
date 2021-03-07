@@ -65,11 +65,9 @@ class LocalStorage:
                 '''
                 CREATE TABLE Parties (
                 ID INTEGER PRIMARY KEY,
-                MemberId INTEGER,
                 PartyName TEXT,
                 FavoriteCount INT,
-                UrlPicture TEXT NULL,
-                FOREIGN KEY (MemberId) REFERENCES Members(ID)
+                UrlPicture TEXT NULL
                 )
                 ''')
 
@@ -89,9 +87,9 @@ class LocalStorage:
                 CREATE TABLE Favorites (
                 ID INTEGER PRIMARY KEY,
                 UserId INTEGER,
-                PartyId INTEGER,
+                MemberId INTEGER,
                 FOREIGN KEY (UserId) REFERENCES Users(ID),
-                FOREIGN KEY (PartyId) REFERENCES Parties(ID)
+                FOREIGN KEY (MemberId) REFERENCES Members(ID)
                 )
                 ''')
 
@@ -392,12 +390,12 @@ class LocalStorage:
             cur = conn.cursor()
             cur.execute(
                 '''
-                insert into Parties (MemberId, PartyName, FavoriteCount, UrlPicture) values (1, 'MoveForward', 3000, null);
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('MoveForward', 3000, null);
                 ''')
 
             cur.execute(
                 '''
-                insert into Parties (MemberId, PartyName, FavoriteCount, UrlPicture) values (5, 'Pracharat', '3000', null);
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('Pracharat', '3000', null);
                 ''')
             
             conn.commit()
@@ -408,22 +406,22 @@ class LocalStorage:
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, PartyId) values (1,1);
+                insert into Favorites (UserId, MemberId) values (1,1);
                 ''')
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, PartyId) values (2,1);
+                insert into Favorites (UserId, MemberId) values (2,2);
                 ''')
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, PartyId) values (3,2);
+                insert into Favorites (UserId, MemberId) values (3,5);
                 ''')
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, PartyId) values (4,2);
+                insert into Favorites (UserId, MemberId) values (4,6);
                 ''')
             
             conn.commit()

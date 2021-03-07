@@ -52,27 +52,38 @@ a {
 
 <h2 style="text-align:center;">From your province, you are able to make an election with :</h2>
 
-<form action={{ url_for('favorite') }} method="post">
+
 <div style="text-align: center;">
     {% for row in datas %}
     <p>PartyName : {{row.1}}</p>
     <p>MemberName : {{row.2}}</p>
-    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite',PartyId=row.0)}}">Like</a>
+    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite', PartyId=row.0, MemberName=row.2)}}">Like</a>
     <hr>
     {% endfor %}
 </div>
-</form>
+
 
 <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>PartyName</th>
-      <th>LeaderName</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-          
-</table>
+      <thead>
+        <tr>
+          <th>PartyName</th>
+          <th>MemberName</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rows in show %}
+        <tr>
+          <td>{{rows.0}}</td>
+          <td>{{rows.1}}</td>
+          <td>
+            <a href="/deleteparty/{{ rows.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+          </td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+
 
 
 <a href="/C2" class="btn btn-primary" type="button">Edit Profile</a>

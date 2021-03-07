@@ -16,7 +16,7 @@ class QueryFunction:
             cur.execute(
                 '''
                 SELECT Parties.id, Parties.UrlPicture , Members.Name, Parties.PartyName, Parties.FavoriteCount
-                from Members inner join Parties on Parties.MemberId = Members.id
+                from Members inner join Parties on Parties.id = Members.PartyId
                 where Members.PositionId = 1 and Parties.Id = ?
                 ''',[PartyId])
 
@@ -38,7 +38,7 @@ class QueryFunction:
             cur.execute(
                 '''
                 SELECT Parties.id, Members.Name, Parties.PartyName, Parties.FavoriteCount
-                from Members inner join Parties on Parties.MemberId = Members.id
+                from Members inner join Parties on Parties.id = Members.PartyId
                 where Members.PositionId = 1
                 ''')
 
@@ -68,8 +68,8 @@ class QueryFunction:
                 SELECT Parties.id, Parties.PartyName, Members.Name
                 from Members
                 inner join Parties on Parties.id = Members.PartyId
-                where AddressId = 1
-                ''')
+                where AddressId = ?
+                ''',[useraddressid[0]])
             
             data = cur.fetchall()
             return data
@@ -157,7 +157,8 @@ class QueryFunction:
                 '''
                 SELECT Parties.PartyName, Members.Name, Parties.FavoriteCount
                 from Parties
-                inner join Members on Parties.MemberId = Members.id
+                inner join Members on Parties.id = Members.PartyId
+                where Members.PositionId = 1
                 order by Parties.FavoriteCount desc limit 3
                 ''')
             return cur.fetchall()
@@ -190,7 +191,7 @@ class QueryFunction:
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
             address = conn.cursor()
-            member = conn.cursor()
+            party = conn.cursor()
 
             address.execute(
             '''
@@ -199,31 +200,29 @@ class QueryFunction:
             where Province = ? and District = ?
             ''', [province, district]
             )
-
             addressid = address.fetchone()
+
+            cur.execute(
+            '''
+            insert into Parties (PartyName, FavoriteCount, UrlPicture) 
+            values (?, 0, null)
+            ''', [partyname]
+            )
+
+            party.execute(
+            '''
+            select id 
+            from Parties
+            where PartyName = ?
+            ''', [partyname]
+            )
+            partyid = party.fetchone()
             
             cur.execute(
             '''
-            insert into Members (Name, AddressId, PositionId) 
-            values (?, ?, 1)
-            ''', [leadername, addressid[0]]
-            )
-
-            member.execute(
-            '''
-            select id 
-            FROM Members
-            ORDER BY ID DESC LIMIT 1
-            '''
-            )
-
-            memberid = member.fetchone()
-
-            cur.execute(
-            '''
-            insert into Parties (MemberId, PartyName, FavoriteCount, UrlPicture) 
-            values (?, ?, 0, null)
-            ''', [memberid[0], partyname]
+            insert into Members (Name, AddressId, PositionId, PartyId) 
+            values (?, ?, 1, ?)
+            ''', [leadername, addressid[0], partyid[0]]
             )
 
             return cur.fetchall()
@@ -231,12 +230,22 @@ class QueryFunction:
     def APIdeleteparty(self,partyid):
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
+            member = conn.cursor()
+
+            member.execute(
+                '''
+                select id
+                from Members
+                where PartyId = ?
+                ''',[partyid]
+                )
+            memberid = member.fetchone()
 
             cur.execute(
                 '''
                 delete from Favorites
-                where PartyId = ?
-                ''',[partyid]
+                where MemberId = ?
+                ''',[memberid[0]]
                 )
             
             cur.execute(
@@ -315,7 +324,7 @@ class QueryFunction:
             
             cur.execute(
                 '''
-                update getParties
+                update Parties
                 set FavoriteCount = FavoriteCount+1
                 where id = ?
                 ''',[partyid]
@@ -326,16 +335,29 @@ class QueryFunction:
     def APIshowfavorite(self, userid):
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
+            party = conn.cursor()
+
+            party.execute(
+            '''
+            select PartyId
+            from Favorites
+            where Userid = ?
+            ''',[userid]
+            )
+
+            partyid = party.fetchone()
 
             cur.execute(
             '''
-            select Favorites.id, Parties.Name, Members.Name
+            select Parties.PartyName, Members.Name
             from Parties
-            inner join Favorites on Favorites.PartyId = Parties.id
-            inner join Members on Members.PartyId = PartyId
-            where Favorites.Userid = ?
-            ''',[userid]
+            inner join Members on Members.PartyId = Parties.Id
+            where Parties.id = ? and Members.id = ?
+            ''',[partyid[0], userid]
             )
-            return cur.fetchall()
-            
+
+            data = cur.fetchall()
+            print(data)
+            return data
+
 queryfunc = QueryFunction()
