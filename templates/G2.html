@@ -1,98 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      a {
+        right: 50%;
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 20%;
+      }
 
-button {
-  right: 50%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 20%;
-}
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        border: 1px solid #ddd;
+      }
 
-.container {
-  height: 500px;
-  position: relative;
-  border: 3px solid green;
-}
+      th,
+      td {
+        text-align: left;
+        padding: 16px;
+      }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-}
-
-th, td {
-  text-align: left;
-  padding: 16px;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-
-
-</style>
-<title>Thailand Electoral 2021</title>
-
-</head>
-<body>
-
-<h1>Party Information</h1>
-
-<div class="container">
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+    <title>Thailand Electoral 2021</title>
+  </head>
+  <body>
     <div class="center">
-        <h2>Party Name</h2>
-        <h2>Party Leader</h2>
-        <img src="profiletest.jpg" alt="Avatar" class="avatar" height="150">
-
-        <div style="text-align: center;">
-            <img src="profiletest.jpg" alt="Avatar" class="avatar" height="150">
-            <h2>Party Name</h2>
-        </div>
-        
+      <tbody>
+        <h1>Party "{{datas.0.3}}" Information</h1>
+        {% for row in datas %}
+        <tr>
+          <h2>Leader : {{row.2}}</h2>
+          <td></td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </div>
-</div>
-<table>
-  <tr>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Points</th>
-  </tr>
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-  <tr>
-    <td>Adam</td>
-    <td>Johnson</td>
-    <td>67</td>
-  </tr>
-</table>
-<button onclick="location.href='G3.html'" type="button">Edit Party</button>
 
-</div>
-</body>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Province</th>
+          <th>District</th>
+          <th>Position</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rows in info %}
+        <tr>
+          <td>{{rows.0}}</td>
+          <td>{{rows.1}}</td>
+          <td>{{rows.2}}</td>
+          <td>{{rows.3}}</td>
+          <td>{{rows.4}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr />
+    <a class="btn btn-warning btn-xs" href="{{ url_for('G3') }}">Edit Party</a>
+  </body>
 </html>

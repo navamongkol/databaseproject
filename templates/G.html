@@ -64,20 +64,23 @@ span.psw {
 
 <h2>Election Commisioner and Party Management</h2>
 
-<form action="/action_page.php" method="post">
+
   <div class="imgcontainer">
-    <img src="GovernmentMain.png" alt="Avatar" class="avatar" height="300">
+    <h1>LOG-IN</h1>
   </div>
 
+  <form action={{ url_for('governmentlogin') }} method="post">
   <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+    <label for="uname"><b>username</b></label>
+    <input type="text" placeholder="username" class="form-control" name="role" required>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <label for="uname"><b>Password</b></label>
+    <input type="text" placeholder="password" class="form-control" name="password" required>
 
-    <button onclick="location.href='G1.html'" type="button">
-         Login</button>
+    <button href="/G1" type="submit" class="pull-right btn btn-primary">Login</button>
+  
+  </div>
+</form>
 
   </div>
 </form>

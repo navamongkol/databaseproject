@@ -1,82 +1,112 @@
 <!DOCTYPE html>
+<!-- saved from url=(0046)file:///C:/Users/GS65/Desktop/Database/C1.html -->
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
 
-button {
-  right: 50%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 20%;
-}
+      a {
+        right: 50%;
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 20%;
+      }
 
-.container {
-  height: 200px;
-  position: relative;
-  border: 3px solid green;
-}
+      .container {
+        height: 200px;
+        position: relative;
+        border: 3px solid green;
+      }
 
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
+      .center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <title>Thailand Electoral 2021</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h2 style="text-align: center">Welcome</h2>
+    <h4 style="text-align: center">"{{name}}"</h4>
 
-</style>
-<title>Thailand Electoral 2021</title>
+    <h4 style="text-align: center">
+      From your address, you are in 
+    </h4>
+    <h4 style="text-align: center">
+      Province "{{province}}" and District "{{district}}
+    </h4>
+    <h4 style="text-align: center">
+      You can make an election with :
+    </h4>
+    <hr>
 
-</head>
-<body>
+    <div style="text-align: center">
+      {% for row in datas %}
+      <p>PartyName  : {{row.1}}</p>
+      <p>MemberName : {{row.3}}</p>
+      <p>Position   : {{row.4}}</p>
+      <a
+        class="btn btn-warning btn-xs"
+        href="{{ url_for('favorite', MemberId=row.2)}}"
+        >Like</a
+      >
+      <hr />
+      {% endfor %}
+    </div>
 
-<h2 style="text-align:center;">Welcome,</h2>
-<h2 style="text-align:center;">xxx</h2>
-<h2 style="text-align:center;">From your province, you are able to make an election with :</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>PartyName</th>
+          <th>MemberName</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rows in show %}
+        <tr>
+          <td>{{rows.1}}</td>
+          <td>{{rows.2}}</td>
+          <td>
+            <a
+              href="/deletefavorite/{{ rows.0 }}"
+              class="btn btn-danger btn-xs"
+              onclick="return confirm('Are you sure to delete this favorite?')"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-    <h2>PartyFav:</h2>
-  </div>
-</div>
-
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-    <h2>PartyFav:</h2>
-  </div>
-</div>
-
-<div class="container">
-  <div class="center">
-    <h2>PartyName:</h2>
-    <h2>PartyId:</h2>
-    <h2>PartyFav:</h2>
-  </div>
-</div>
-
-<img src="lineHorizon.png" alt="line">
-
-
-<button onclick="location.href='C2.html'" type="button">
-         Edit Profile</button>
-</body>
+    <a href="/C2" class="btn btn-primary" type="button">Edit Profile</a>
+  </body>
 </html>

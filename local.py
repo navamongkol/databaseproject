@@ -1,39 +1,95 @@
 import sqlite3
-from common import config
-from cv import backend
-
+from flask import Flask, render_template, request
+import json
+# from common import config
+# from cv import backend
+LOCAL_DB = 'local.db'
 class LocalStorage:
+    
     def __init__(self):
         # self.connection = sqlite3.connect(config.LOCAL_DB)
         # self.cursor = self.connection.cursor()
         if not self.checkTableExist():
+            print("Helloworld")
             self.initializeDatabase()
-
-    
-    def create_connection(self):
-        return self.connection.cursor()
-
+            
 
     def initializeDatabase(self):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
+        with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
             cur.execute(
                 '''
-                CREATE TABLE Images
-                (
-                    id INTEGER,
-                    location_id INTEGER,
-                    body BLOB
+                CREATE TABLE Positions (
+                ID INTEGER PRIMARY KEY,
+                PositionName TEXT
+                ) 
+                ''')
+
+            cur.execute(
+                '''
+                CREATE TABLE Addresses (
+                ID INTEGER PRIMARY KEY,
+                Province TEXT,
+                District TEXT
                 )
                 ''')
 
             cur.execute(
                 '''
-                CREATE TABLE UnknownImages
-                (
-                    id INTEGER,
-                    location_id INTEGER,
-                    body BLOB
+                CREATE TABLE Members (
+                ID INTEGER PRIMARY KEY,
+                Name TEXT,
+                AddressId INTEGER,
+                PositionId INTEGER,
+                PartyId INTEGER,
+                FOREIGN KEY (PositionId) REFERENCES Positions(ID),
+                FOREIGN KEY (AddressId) REFERENCES Addresses(ID),
+                FOREIGN KEY (PartyId) REFERENCES Parties(ID)
+                )
+                ''')
+            
+            cur.execute(
+                '''
+                CREATE TABLE Users (
+                ID INTEGER PRIMARY KEY,
+                CitizenId TEXT,
+                Name TEXT,
+                BirthDate TEXT,
+                PhoneNumber TEXT,
+                AddressId INTEGER,
+                FOREIGN KEY (AddressId) REFERENCES Addresses(ID)
+                )
+                ''')
+
+            cur.execute(
+                '''
+                CREATE TABLE Parties (
+                ID INTEGER PRIMARY KEY,
+                PartyName TEXT,
+                FavoriteCount INT,
+                UrlPicture TEXT NULL
+                )
+                ''')
+
+            cur.execute(
+                '''
+                CREATE TABLE Logins (
+                ID INTEGER PRIMARY KEY,
+                Role TEXT,
+                UserId INTEGER NULL,
+                Password INTEGER,
+                FOREIGN KEY (UserId) REFERENCES Users(ID)
+                )
+                ''')
+
+            cur.execute(
+                '''
+                CREATE TABLE Favorites (
+                ID INTEGER PRIMARY KEY,
+                UserId INTEGER,
+                MemberId INTEGER,
+                FOREIGN KEY (UserId) REFERENCES Users(ID),
+                FOREIGN KEY (MemberId) REFERENCES Members(ID)
                 )
                 ''')
 
@@ -41,7 +97,7 @@ class LocalStorage:
 
 
     def checkTableExist(self):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
+        with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
             cur.execute(
                 '''
@@ -49,7 +105,7 @@ class LocalStorage:
                 FROM sqlite_master 
                 WHERE type='table' 
                     AND 
-                    name='Images' 
+                    name='Positions' 
                 ''')  
             
             if cur.fetchone()[0] == 1:
@@ -57,110 +113,317 @@ class LocalStorage:
             else:
                 return False
 
-
-    def get_features(self, top=None):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
+    def get_tablePositions(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
 
-            if top is None:
-                cur.execute(
-                    '''
-                    SELECT *
-                    FROM Images
-                    ''')
-            else:
-                cur.execute(
-                    '''
-                    SELECT *
-                    FROM Images
-                    LIMIT ?
-                    ''', [top])
-
-            return [(x[0], x[1], backend.pickle_to_feature(x[2])) for x in cur.fetchall()]
-
-    def get_feature_by_id(self, index):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
-            cur = conn.cursor()
             cur.execute(
                 '''
                 SELECT *
-                FROM Images
-                WHERE id = ?
-                ''', [index])
+                FROM Positions
+                ''')
+            
+            return cur.fetchall()
 
-            data = cur.fetchone()
-
-            return (data[0], data[1], backend.pickle_to_feature(data[2]))
-
-
-    def get_feature_by_location_id(self, location_id):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
+    def get_tableAddresses(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
+
             cur.execute(
                 '''
                 SELECT *
-                FROM Images
-                WHERE location_id = ?
-                ''', [location_id])
+                FROM Addresses
+                ''')
+            
+            return cur.fetchall()
 
-            return [(x[0], x[1], backend.pickle_to_feature(x[2])) for x in cur.fetchall()]
-
-
-    def add_feature(self, product_id, location_id, kp, desc):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
-            feature = backend.feature_to_pickle(kp, desc)
+    def get_tableMembers(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
 
-            cur.execute(
-                '''
-                INSERT INTO Images
-                (id, location_id, body)
-                VALUES
-                (?, ?, ?)
-                ''', [product_id, location_id, feature])
-
-            conn.commit()
-
-
-    def update_feature(self, index, kp, desc):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
-            feature = backend.feature_to_pickle(kp, desc)
-            cur = conn.cursor()
-
-            cur.execute(
-                '''
-                UPDATE Images
-                SET body = ?
-                WHERE id = ?
-                ''', [feature, index])
-
-            conn.commit()
-
-
-    def delete_features(self, ids):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
-            cur = conn.cursor()
-            idsQuery = tuple(ids)
-            cur.execute(
-                '''
-                DELETE FROM Images
-                WHERE id in ?
-                ''', [idsQuery])
-
-            conn.commit()
-
-
-    def get_undetected_features_by_location_id(self, location_id):
-        with sqlite3.connect(config.LOCAL_DB) as conn:
-            cur = conn.cursor()
             cur.execute(
                 '''
                 SELECT *
-                FROM UnknownImages
-                WHERE location_id = ?
-                ''', [location_id])
+                FROM Members
+                ''')
+            
+            return cur.fetchall()
+    
+    def get_tableUsers(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
 
-            return [(x[0], x[1], backend.pickle_to_feature(x[2])) for x in cur.fetchall()]
+            cur.execute(
+                '''
+                SELECT *
+                FROM Users
+                ''')
+            
+            return cur.fetchall()
+    
+    def get_tableLogins(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
 
+            cur.execute(
+                '''
+                SELECT *
+                FROM Logins
+                ''')
+            
+            return cur.fetchall()
+    
+    def get_tableParties(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                SELECT *
+                FROM Parties
+                ''')
+            
+            return cur.fetchall()
+
+    def get_tableFavorites(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                SELECT *
+                FROM Favorites
+                ''')
+            
+            return cur.fetchall()
+
+    def insert_positions(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                insert into Positions (PositionName) values ('Leader');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Positions (PositionName) values ('Secretary');
+                ''')
+            
+            cur.execute(
+                '''
+                insert into Positions (PositionName) values ('Manager');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Positions (PositionName) values ('General');
+                ''')
+
+            conn.commit()
+    
+    def insert_addresses(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                INSERT into Addresses (Province, District) values ('Bangkok', 'Dusit');
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Addresses (Province, District) values ('Bangkok', 'Jatujuk');
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Addresses (Province, District) values ('Nonthaburi', 'Bangyai');
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Addresses (Province, District) values ('Nonthaburi', 'Pakkret');
+                ''')
+
+            conn.commit()
+
+    def insert_members(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('ThanathornJuangroongruangkit', 2, 1, 1);
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PiyabutrSangkanokul', 2, 2, 1);
+
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('KultidaRungruengkiet', 3, 3, 1);
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('ChumnanJunreuang', 3, 4, 1);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PrayuthJanOCha', 4, 1, 2);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PravitWongsuwan', 2, 2, 2);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('AnuchaNakasai', 1, 3, 2);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('SontirakSonthijitrawong', 1, 4, 2);
+                ''')
+
+            conn.commit()
+        
+    def insert_users(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('1138492850123', 'KimmyJosh', '25/01/2001', '0942851923', 2);
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('3340129550123', 'EmilyKeen', '14/03/1992', '0852849382', 2);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('1827593728412', 'KidneyRose', '14/05/1998', '0851925823', 3);
+                ''')
+
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('1182958302323', 'TeylorHowl', '16/12/1999', '0901482932', 3);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('1109892729311', 'DannialOwen', '27/09/1988', '0871925832', 4);
+                ''')
+            
+            cur.execute(
+                '''
+                INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
+                values ('3301923124894', 'JoshWilliam', '20/05/2000', '0989182412', 2);
+                ''')
+
+            conn.commit()
+
+    def insert_logins(self):
+
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('Admin', null, 'jIMPlNq');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 1, 'TCdCUjf1j');
+                ''')
+            
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 2, 'U6fmU9n');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 3, 'faZ9Ll1k4');
+                ''')
+            
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 4, '4n8oTbHc1SbZ');
+                ''')
+            
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('Admin', null, '0Ip1iPm');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 5, 's9vQtqlI');
+                ''')
+
+            cur.execute(
+                '''
+                insert into Logins (Role, UserId, Password) values ('User', 6, 'r9DHsNQ3QdN');
+                ''')
+
+            conn.commit()
+    
+    def insert_parties(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+            cur.execute(
+                '''
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('MoveForward', 2, null);
+                ''')
+
+            cur.execute(
+                '''
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('Pracharat', 2, null);
+                ''')
+            
+            conn.commit()
+    
+    def insert_favorites(self):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                insert into Favorites (UserId, MemberId) values (1,1);
+                ''')
+
+            cur.execute(
+                '''
+                insert into Favorites (UserId, MemberId) values (2,2);
+                ''')
+
+            cur.execute(
+                '''
+                insert into Favorites (UserId, MemberId) values (3,3);
+                ''')
+
+            cur.execute(
+                '''
+                insert into Favorites (UserId, MemberId) values (4,4);
+                ''')
+            
+            conn.commit()
 
 storage = LocalStorage()
