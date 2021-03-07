@@ -1,69 +1,83 @@
 <!DOCTYPE html>
 <!-- saved from url=(0046)file:///C:/Users/GS65/Desktop/Database/C1.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
 
-a {
-  right: 50%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 20%;
-}
+      a {
+        right: 50%;
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 20%;
+      }
 
-.container {
-  height: 200px;
-  position: relative;
-  border: 3px solid green;
-}
+      .container {
+        height: 200px;
+        position: relative;
+        border: 3px solid green;
+      }
 
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
+      .center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <title>Thailand Electoral 2021</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h2 style="text-align: center">Welcome</h2>
+    <h4 style="text-align: center">"{{name}}"</h4>
 
-</style>
-<title>Thailand Electoral 2021</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
+    <h4 style="text-align: center">
+      From your address, you are in province "{{province}}" and district "{{district}}" to make an election with :
+    </h4>
+    <h4 style="text-align: center">
+      Province "{{province}}" and District "{{district}}" to make an election with :
+    </h4>
+    
 
-<h2 style="text-align:center;">Welcome</h2>
-<p style="text-align:center;">{{name}}</p>
+    <div style="text-align: center">
+      {% for row in datas %}
+      <p>PartyName : {{row.1}}</p>
+      <p>MemberName : {{row.3}}</p>
+      <a
+        class="btn btn-warning btn-xs"
+        href="{{ url_for('favorite', MemberId=row.2)}}"
+        >Like</a
+      >
+      <hr />
+      {% endfor %}
+    </div>
 
-<h2 style="text-align:center;">From your province, you are able to make an election with :</h2>
-
-
-<div style="text-align: center;">
-    {% for row in datas %}
-    <p>PartyName : {{row.1}}</p>
-    <p>MemberName : {{row.3}}</p>
-    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite', MemberId=row.2)}}">Like</a>
-    <hr>
-    {% endfor %}
-</div>
-
-
-<table class="table table-bordered">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th>PartyName</th>
@@ -77,16 +91,18 @@ a {
           <td>{{rows.1}}</td>
           <td>{{rows.2}}</td>
           <td>
-            <a href="/deletefavorite/{{ rows.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete this favorite?')">Delete</a>
+            <a
+              href="/deletefavorite/{{ rows.0 }}"
+              class="btn btn-danger btn-xs"
+              onclick="return confirm('Are you sure to delete this favorite?')"
+              >Delete</a
+            >
           </td>
         </tr>
-          {% endfor %}
+        {% endfor %}
       </tbody>
     </table>
 
-
-
-<a href="/C2" class="btn btn-primary" type="button">Edit Profile</a>
-
-
-</body></html>
+    <a href="/C2" class="btn btn-primary" type="button">Edit Profile</a>
+  </body>
+</html>

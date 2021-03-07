@@ -76,7 +76,8 @@ def governmentlogin():
 def G2(PartyId):
     session['PartyId'] = PartyId
     print(session['PartyId'])
-    return render_template('G2.html',datas = queryfunc.APIshowpartiesbyid(PartyId))
+    return render_template('G2.html',datas = queryfunc.APIshowpartiesbyid(PartyId),
+                                     info = queryfunc.APIshowpartiesinformationbyid(PartyId))
 
 @app.route('/G3')
 def G3():
@@ -99,11 +100,14 @@ def userlogin():
     Password = request.form['password']
     loginresult = queryfunc.APIloginUser(CitizenId,BirthDate,Password)
     if (loginresult is not None):
+        print(loginresult[4],loginresult[-1])
         session['userid'] = loginresult[0]
-        session['fullname'] = loginresult[1]
+        session['fullname'] = loginresult[3]
         return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),
-                                         name=loginresult[1],
-                                         show=queryfunc.APIshowfavorite(loginresult[0]))
+                                         name=loginresult[3],
+                                         show=queryfunc.APIshowfavorite(loginresult[0]),
+                                         province=loginresult[1],
+                                         district=loginresult[2])
     else:
         return 'Failed'
 

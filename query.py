@@ -21,14 +21,22 @@ class QueryFunction:
                 ''',[PartyId])
 
             data = cur.fetchall()
-            result = []
-            for i in range(len(data)):
-                a = {"Url":data[i][0],
-                     "LeaderName": data[i][1],
-                     "PartyName": data[i][2],
-                     "Count": data[i][3]}    
-                result.append(a)
-            # return jsonify(result)
+            return data
+    
+    def APIshowpartiesinformationbyid(self,PartyId):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+            
+            cur.execute(
+                '''
+                SELECT Members.id, Members.Name, Addresses.Province, Addresses.District, Positions.PositionName
+                from Members
+                inner join Addresses on Members.AddressId = Addresses.id
+                inner join Positions on Members.PositionId = Positions.id
+                where Members.PartyId = ?
+                ''',[PartyId])
+
+            data = cur.fetchall()
             return data
 
     def APIshowpartiesforgovernment(self):
@@ -77,8 +85,10 @@ class QueryFunction:
 
             cur.execute(
                 '''
-                SELECT Users.id, Users.Name, Users.CitizenId, Users.BirthDate, Logins.Password
-                from Logins inner join Users on Users.id = Logins.UserId
+                SELECT Users.id, Addresses.Province, Addresses.District, Users.Name, Users.CitizenId, Users.BirthDate, Logins.Password
+                from Logins 
+                inner join Users on Users.id = Logins.UserId
+                inner join Addresses on Addresses.id = Users.AddressId
                 WHERE CitizenId = ? AND BirthDate = ? AND Password = ?
                 ''', [CitizenId, BirthDate, Password])
             return cur.fetchone()

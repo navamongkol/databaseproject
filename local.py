@@ -266,7 +266,7 @@ class LocalStorage:
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId, PartyId) values ('KultidaRungruengkiet', 1, 3, 1);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('KultidaRungruengkiet', 3, 3, 1);
                 ''')
 
             cur.execute(
@@ -281,7 +281,7 @@ class LocalStorage:
             
             cur.execute(
                 '''
-                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PravitWongsuwan', 5, 2, 2);
+                INSERT into Members (name, AddressId, PositionId, PartyId) values ('PravitWongsuwan', 2, 2, 2);
                 ''')
             
             cur.execute(
