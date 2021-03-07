@@ -54,22 +54,18 @@ tr:nth-child(even) {
 </head>
 <body>
 
-<h1>Party Information</h1>
-
 <div class="center">
-      <tbody>
-        {% for row in datas %}
-        <tr>
-          <td>{{row.1}}</td>
-          <td>{{row.2}}</td>
-          <td>{{row.3}}</td>
-          <td>{{row.4}}</td>
-          <td>
-          </td>
-        </tr>
-          {% endfor %}
-      </tbody>
-    </div>
+  <tbody>
+    <h1>Party {{datas.0.3}} Information</h1>
+    {% for row in datas %}
+    <tr>
+      <h2>Leader : {{row.2}}</h2>
+      <td>
+      </td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</div>
 <div class="container">
 
     <div class="center">

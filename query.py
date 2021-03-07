@@ -43,7 +43,6 @@ class QueryFunction:
                 ''')
 
             data = cur.fetchall()
-            result = []
             # return jsonify(result)
             return data
 
@@ -55,24 +54,22 @@ class QueryFunction:
 
             address.execute(
                 '''
-                select Addresses.Id
-                from Addresses
-                inner join Users on Users.AddressId = Addresses.Id
-                where Addresses.id = ? and Users.AddressId = ?
-                ''',[userid, userid])
+                select AddressId
+                from Users
+                '''
+                )
 
             useraddressid = address.fetchone()
-
+            print("Debug Address : ", useraddressid)
             cur.execute(
                 '''
-                SELECT Parties.id, Parties.PartyName, Members.Name
+                SELECT Parties.id, Parties.PartyName, Members.id, Members.Name
                 from Members
                 inner join Parties on Parties.id = Members.PartyId
                 where AddressId = ?
-                ''',[useraddressid[0]])
-            
-            data = cur.fetchall()
-            return data
+                ''',[useraddressid[0]]
+                )
+            return cur.fetchall()
 
     def APIloginUser(self, CitizenId, BirthDate, Password):
         with sqlite3.connect(LOCAL_DB) as conn:
@@ -176,16 +173,23 @@ class QueryFunction:
             ''',[Province, District])
 
             addressid = address.fetchone()
-            print(addressid)
+            
             cur.execute(
                 '''
                 update Users
                 set Phonenumber = ?,
                     AddressId = ?
                 where id = ?
-
                 ''', [Phonenumber, addressid[0], userid])
-            return cur.fetchone()
+            
+            cur.execute(
+                '''
+                delete from Favorites
+                where UserId = ?
+                ''',[userid]
+                )
+            
+            return cur.fetchall()
 
     def APIinsertparty(self, partyname, leadername, province, district):
         with sqlite3.connect(LOCAL_DB) as conn:
@@ -311,15 +315,26 @@ class QueryFunction:
             
             return cur.fetchall()
 
-    def APIaddfavorite(self,partyid, userid):
+    def APIaddfavorite(self,memberid, userid):
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
+            party = conn.cursor()
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, PartyId)
+                select Parties.id
+                from Parties
+                inner join Members on Members.PartyId = Parties.Id
+                where Members.id = ?
+                ''',[memberid]
+                )
+            partyid = party.fetchone()
+
+            cur.execute(
+                '''
+                insert into Favorites (UserId, MemberId)
                 values(?,?)
-                ''',[userid, partyid]
+                ''',[userid, memberid]
                 )
             
             cur.execute(
@@ -329,35 +344,38 @@ class QueryFunction:
                 where id = ?
                 ''',[partyid]
                 )
-            
+
             return cur.fetchall()
     
     def APIshowfavorite(self, userid):
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
-            party = conn.cursor()
-
-            party.execute(
-            '''
-            select PartyId
-            from Favorites
-            where Userid = ?
-            ''',[userid]
-            )
-
-            partyid = party.fetchone()
-
+            
             cur.execute(
-            '''
-            select Parties.PartyName, Members.Name
-            from Parties
-            inner join Members on Members.PartyId = Parties.Id
-            where Parties.id = ? and Members.id = ?
-            ''',[partyid[0], userid]
-            )
+                '''
+                select Favorites.id, Parties.PartyName, Members.Name from Members
+                inner join Favorites on Favorites.Memberid = Members.Id
+                inner join Parties on Parties.id = Members.PartyId
+                where Favorites.UserId = ?
+                ''',[userid]
+                )
 
             data = cur.fetchall()
-            print(data)
+            # print("Debug : ", json.dumps(data))
             return data
+
+    def APIdeletefavorite(self,favoriteid):
+        with sqlite3.connect(LOCAL_DB) as conn:
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                delete
+                from Favorites
+                where id = ?
+                ''',[favoriteid] 
+                )
+            
+            return cur.fetchall()
 
 queryfunc = QueryFunction()

@@ -39,13 +39,13 @@ def getFavorites():
 
 @app.route('/addtable')
 def addTable():
-    # storage.insert_positions()
-    # storage.insert_addresses()
-    # storage.insert_members()
-    # storage.insert_users()
-    # storage.insert_logins()
-    # storage.insert_parties()
-    # storage.insert_favorites()
+    storage.insert_positions()
+    storage.insert_addresses()
+    storage.insert_members()
+    storage.insert_users()
+    storage.insert_logins()
+    storage.insert_parties()
+    storage.insert_favorites()
     return "Success"
 
 @app.route('/')
@@ -101,13 +101,6 @@ def userlogin():
     if (loginresult is not None):
         session['userid'] = loginresult[0]
         session['fullname'] = loginresult[1]
-        session['PartyId'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][0]
-        session['PartyName'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][1]
-        session['MemberName'] = queryfunc.APIshowpartiesforuser(loginresult[0])[0][2]
-        # PartyName = session['PartyName']
-        # MemberName = session['MemberName']
-        print("MemberName",session['MemberName'])
-        print(session['PartyId'],session['PartyName'])
         return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),
                                          name=loginresult[1],
                                          show=queryfunc.APIshowfavorite(loginresult[0]))
@@ -135,7 +128,8 @@ def updateuser():
     Phonenumber = request.form['phonenumber']
     userid = session['userid']
     queryfunc.APIupdateUser(userid, Province, District, Phonenumber) 
-    return redirect(url_for('return_to_homepage')) 
+    return "Success"
+    # return redirect(url_for('return_to_homepage')) 
 
 @app.route('/deleteparty/<int:id>', methods = ['GET'])
 def deleteparty(id):
@@ -162,10 +156,14 @@ def deletemember():
         queryfunc.APIdeletemember(partyid, name)
         return "Success"
 
-@app.route('/favorite/<int:PartyId>', methods = ['GET','POST'])
-def favorite(PartyId):
+@app.route('/favorite/<int:MemberId>', methods = ['GET','POST'])
+def favorite(MemberId):
     userid = session['userid']
-    queryfunc.APIaddfavorite(PartyId, userid)
+    queryfunc.APIaddfavorite(MemberId, userid)
     return "Success"
 
+@app.route('/deletefavorite/<int:favoriteid>', methods = ['GET'])
+def deletefavorite(favoriteid):
+    queryfunc.APIdeletefavorite(favoriteid)
+    return "Success"
 app.run(debug = True)

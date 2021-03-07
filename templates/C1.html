@@ -56,8 +56,8 @@ a {
 <div style="text-align: center;">
     {% for row in datas %}
     <p>PartyName : {{row.1}}</p>
-    <p>MemberName : {{row.2}}</p>
-    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite', PartyId=row.0, MemberName=row.2)}}">Like</a>
+    <p>MemberName : {{row.3}}</p>
+    <a class="btn btn-warning btn-xs" href="{{ url_for('favorite', MemberId=row.2)}}">Like</a>
     <hr>
     {% endfor %}
 </div>
@@ -74,10 +74,10 @@ a {
       <tbody>
         {% for rows in show %}
         <tr>
-          <td>{{rows.0}}</td>
           <td>{{rows.1}}</td>
+          <td>{{rows.2}}</td>
           <td>
-            <a href="/deleteparty/{{ rows.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+            <a href="/deletefavorite/{{ rows.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete this favorite?')">Delete</a>
           </td>
         </tr>
           {% endfor %}

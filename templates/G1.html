@@ -70,7 +70,7 @@
           <td>{{row.3}}</td>
           <td>
             <a class="btn btn-warning btn-xs" href="{{ url_for('G2', PartyId=row.0) }}">Edit</a>
-            <a href="/deleteparty/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+            <a href="/deleteparty/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete this party?')">Delete</a>
           </td>
         </tr>
           {% endfor %}
