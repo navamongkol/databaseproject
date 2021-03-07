@@ -75,14 +75,13 @@ def governmentlogin():
 @app.route('/G2/<int:PartyId>')
 def G2(PartyId):
     session['PartyId'] = PartyId
-    print(session['PartyId'])
     return render_template('G2.html',datas = queryfunc.APIshowpartiesbyid(PartyId),
                                      info = queryfunc.APIshowpartiesinformationbyid(PartyId))
 
 @app.route('/G3')
 def G3():
     PartyId = session['PartyId']
-    print(PartyId)
+    
     return render_template('G3.html')
 
 @app.route('/G4')
@@ -100,7 +99,6 @@ def userlogin():
     Password = request.form['password']
     loginresult = queryfunc.APIloginUser(CitizenId,BirthDate,Password)
     if (loginresult is not None):
-        print(loginresult[4],loginresult[-1])
         session['userid'] = loginresult[0]
         session['fullname'] = loginresult[3]
         return render_template('C1.html',datas = queryfunc.APIshowpartiesforuser(loginresult[0]),
@@ -148,7 +146,6 @@ def addmember():
         position = request.form['position']
         province = request.form['province']
         district = request.form['district']
-        print(type(partyid),type(name),type(position),type(province),type(district))
         queryfunc.APIaddmember(partyid, name, position, province, district)
         return "Success"
 
@@ -170,4 +167,5 @@ def favorite(MemberId):
 def deletefavorite(favoriteid):
     queryfunc.APIdeletefavorite(favoriteid)
     return "Success"
+
 app.run(debug = True)

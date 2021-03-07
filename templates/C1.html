@@ -57,17 +57,21 @@
     <h4 style="text-align: center">"{{name}}"</h4>
 
     <h4 style="text-align: center">
-      From your address, you are in province "{{province}}" and district "{{district}}" to make an election with :
+      From your address, you are in 
     </h4>
     <h4 style="text-align: center">
-      Province "{{province}}" and District "{{district}}" to make an election with :
+      Province "{{province}}" and District "{{district}}
     </h4>
-    
+    <h4 style="text-align: center">
+      You can make an election with :
+    </h4>
+    <hr>
 
     <div style="text-align: center">
       {% for row in datas %}
-      <p>PartyName : {{row.1}}</p>
+      <p>PartyName  : {{row.1}}</p>
       <p>MemberName : {{row.3}}</p>
+      <p>Position   : {{row.4}}</p>
       <a
         class="btn btn-warning btn-xs"
         href="{{ url_for('favorite', MemberId=row.2)}}"

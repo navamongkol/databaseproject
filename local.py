@@ -303,7 +303,7 @@ class LocalStorage:
             cur.execute(
                 '''
                 INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
-                values ('1138492850123', 'KimmyJosh', '25/01/2001', '0942851923', 1);
+                values ('1138492850123', 'KimmyJosh', '25/01/2001', '0942851923', 2);
                 ''')
 
             cur.execute(
@@ -321,19 +321,19 @@ class LocalStorage:
             cur.execute(
                 '''
                 INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
-                values ('1182958302323', 'TeylorHowl', '16/12/1999', '0901482932', 4);
+                values ('1182958302323', 'TeylorHowl', '16/12/1999', '0901482932', 3);
                 ''')
             
             cur.execute(
                 '''
                 INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
-                values ('1109892729311', 'DannialOwen', '27/09/1988', '0871925832', 5);
+                values ('1109892729311', 'DannialOwen', '27/09/1988', '0871925832', 4);
                 ''')
             
             cur.execute(
                 '''
                 INSERT into Users (CitizenId, name, BirthDate, PhoneNumber, AddressId)
-                values ('3301923124894', 'JoshWilliam', '20/05/2000', '0989182412', 6);
+                values ('3301923124894', 'JoshWilliam', '20/05/2000', '0989182412', 2);
                 ''')
 
             conn.commit()
@@ -390,12 +390,12 @@ class LocalStorage:
             cur = conn.cursor()
             cur.execute(
                 '''
-                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('MoveForward', 3000, null);
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('MoveForward', 2, null);
                 ''')
 
             cur.execute(
                 '''
-                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('Pracharat', '3000', null);
+                insert into Parties (PartyName, FavoriteCount, UrlPicture) values ('Pracharat', 2, null);
                 ''')
             
             conn.commit()
@@ -416,12 +416,12 @@ class LocalStorage:
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, MemberId) values (3,5);
+                insert into Favorites (UserId, MemberId) values (3,3);
                 ''')
 
             cur.execute(
                 '''
-                insert into Favorites (UserId, MemberId) values (4,6);
+                insert into Favorites (UserId, MemberId) values (4,4);
                 ''')
             
             conn.commit()

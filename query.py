@@ -68,12 +68,13 @@ class QueryFunction:
                 )
 
             useraddressid = address.fetchone()
-            print("Debug Address : ", useraddressid)
+
             cur.execute(
                 '''
-                SELECT Parties.id, Parties.PartyName, Members.id, Members.Name
+                SELECT Parties.id, Parties.PartyName, Members.id, Members.Name, Positions.PositionName
                 from Members
                 inner join Parties on Parties.id = Members.PartyId
+                inner join Positions on Members.PositionId = Positions.id
                 where AddressId = ?
                 ''',[useraddressid[0]]
                 )
@@ -176,12 +177,12 @@ class QueryFunction:
             address = conn.cursor()
             
             address.execute(
-            '''
+                '''
                 select id
                 from Addresses
                 where Province = ? and District = ?
-            ''',[Province, District])
-
+                ''',[Province, District]
+                )
             addressid = address.fetchone()
             
             cur.execute(
@@ -190,7 +191,8 @@ class QueryFunction:
                 set Phonenumber = ?,
                     AddressId = ?
                 where id = ?
-                ''', [Phonenumber, addressid[0], userid])
+                ''', [Phonenumber, addressid[0], userid]
+                )
             
             cur.execute(
                 '''
@@ -330,16 +332,15 @@ class QueryFunction:
             cur = conn.cursor()
             party = conn.cursor()
 
-            cur.execute(
+            party.execute(
                 '''
-                select Parties.id
-                from Parties
-                inner join Members on Members.PartyId = Parties.Id
-                where Members.id = ?
+                select PartyId
+                from Members
+                where id = ?
                 ''',[memberid]
                 )
             partyid = party.fetchone()
-
+            
             cur.execute(
                 '''
                 insert into Favorites (UserId, MemberId)
@@ -352,7 +353,7 @@ class QueryFunction:
                 update Parties
                 set FavoriteCount = FavoriteCount+1
                 where id = ?
-                ''',[partyid]
+                ''',[partyid[0]]
                 )
 
             return cur.fetchall()
@@ -369,14 +370,23 @@ class QueryFunction:
                 where Favorites.UserId = ?
                 ''',[userid]
                 )
-
+            
             data = cur.fetchall()
-            # print("Debug : ", json.dumps(data))
             return data
 
     def APIdeletefavorite(self,favoriteid):
         with sqlite3.connect(LOCAL_DB) as conn:
             cur = conn.cursor()
+            member = conn.cursor()
+            party = conn.cursor()
+            member.execute(
+                '''
+                select MemberId
+                from Favorites
+                where id = ?
+                ''',[favoriteid]
+                )
+            memberid = member.fetchone()
 
             cur.execute(
                 '''
@@ -384,6 +394,24 @@ class QueryFunction:
                 from Favorites
                 where id = ?
                 ''',[favoriteid] 
+                )
+            
+            party.execute(
+                '''
+                select Parties.id
+                from Parties
+                inner join Members on Members.PartyId = Parties.id
+                where Members.id = ?
+                ''',[memberid[0]]
+                )
+            partyid = party.fetchone()
+
+            cur.execute(
+                '''
+                update Parties
+                set FavoriteCount = FavoriteCount - 1
+                where id = ?
+                ''',[partyid[0]]
                 )
             
             return cur.fetchall()
