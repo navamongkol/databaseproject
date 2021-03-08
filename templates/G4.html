@@ -1,68 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Thailand Electoral 2021</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
-
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
+  .Add Member {
+  margin-left: auto;
+  margin-right: auto;
   }
-  .cancelbtn {
-     width: 100%;
+  .form-control form-control {
+  margin-left: auto;
+  margin-right: auto;
   }
-}
+  .form-group {
+  margin-left: auto;
+  margin-right: auto;
+  }
 </style>
-
+<head>
+  <title>Thailand Electoral 2021</title>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<h1>Add Party</h1>
-
-
-<div class="Add Party">
+<div class="Add Party mx-4">
+  <h2>Add Party</h2>
   <form action="{{ url_for('insertparty') }}" method="post">
     <div class="form-group">
       <label for="fname">PartyName</label>
-      <input type="text" placeholder="Enter Party name" class="form-control"  name="partyname" required>
+      <input type="text" class="form-control form-control" style="width: 500px" placeholder="Enter PartyName" name="partyname" required>
     </div>
     <div class="form-group">
       <label for="fname">Leader Name</label>
-      <input type="text" placeholder="Enter Leader name" class="form-control"  name="leadername" required>
+      <input type="text" class="form-control form-control" style="width: 500px" placeholder="Enter LeaderName" name="leadername" required>
     </div>
     <div class="form-group">
       <label for="fname">Province</label>
-      <input type="text" placeholder="Enter Province" class="form-control"  name="province" required>
+      <input type="text" class="form-control form-control" style="width: 500px" placeholder="Enter Province" name="province" required>
     </div>
     <div class="form-group">
       <label for="fname">District</label>
-      <input type="text" placeholder="Enter District" class="form-control"  name="district" required>
+      <input type="text" class="form-control form-control" style="width: 500px" placeholder="Enter District" name="district" required>
     </div>
-    <button type="submit" class="pull-right btn btn-primary">Save</button>
+    <button type="submit" class="pull-right btn btn-info" style="width: 98px">Save</button>
     
     </div>
 </form>
