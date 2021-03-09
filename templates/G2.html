@@ -1,77 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-      }
-      a {
-        right: 50%;
-        background-color: #4caf50;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 20%;
-      }
+<head>
+<style>
+  .table {
+  margin-left: auto;
+  margin-right: auto;
+  }
+</style>
+<head>
+  <title>Thailand Electoral 2021</title>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>  
 
-      table {
-        border-collapse: collapse;
-        border-spacing: 0;
-        width: 100%;
-        border: 1px solid #ddd;
-      }
+<body>
+  <div class="center mx-4">
+    <tbody>
+      <h2>Party "{{datas.0.3}}" Information</h2>
+      {% for row in datas %}
+      <tr>
+        <h4>Leader : {{row.2}}</h4>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </div>
 
-      th,
-      td {
-        text-align: left;
-        padding: 16px;
-      }
-
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-    </style>
-    <title>Thailand Electoral 2021</title>
-  </head>
-  <body>
-    <div class="center">
-      <tbody>
-        <h1>Party "{{datas.0.3}}" Information</h1>
-        {% for row in datas %}
-        <tr>
-          <h2>Leader : {{row.2}}</h2>
-          <td></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </div>
-
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Position</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rows in info %}
-        <tr>
-          <td>{{rows.0}}</td>
-          <td>{{rows.1}}</td>
-          <td>{{rows.2}}</td>
-          <td>{{rows.3}}</td>
-          <td>{{rows.4}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <hr />
-    <a class="btn btn-warning btn-xs" href="{{ url_for('G3') }}">Edit Party</a>
-  </body>
+  <table class="table" style="width: 98%">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Province</th>
+        <th>District</th>
+        <th>Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rows in info %}
+      <tr>
+        <td>{{rows.1}}</td>
+        <td>{{rows.2}}</td>
+        <td>{{rows.3}}</td>
+        <td>{{rows.4}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a class="btn btn-warning btn-xs mx-4" href="{{ url_for('G3') }}">Edit Party</a>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
 </html>

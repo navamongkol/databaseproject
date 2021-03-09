@@ -1,65 +1,38 @@
 <!DOCTYPE html>
 <html>
-
+<style>
+  .table {
+  margin-left: auto;
+  margin-right: auto;
+  }
+</style>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        
-        input[type=text],
-        input[type=password] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        
-        button {
-            right: 50%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 20%;
-        }
-        
-        .container {
-            height: 220px;
-            position: relative;
-            border: 3px solid green;
-        }
-    </style>
-    <title>Thailand Electoral 2021</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>Thailand Electoral 2021</title>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
     <div style="text-align: center;">
-    <h2>Top3 Favorite Parties</h2>
-    {% for row in top3 %}
-    <p>PartyName : {{row.0}}</p>
-    <p>MemberName : {{row.1}}</p>
-    <p>FavoriteCount : {{row.2}}</p>
-    
-    <hr>
-    {% endfor %}
-</div>
-
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>PartyName</th>
-          <th>LeaderName</th>
-          <th>FavoriteCount</th>
-          <th>Action</th>
+      <h2>Top3 Favorite Parties</h2>
+      {% for row in top3 %}
+      <p>PartyName : {{row.0}}</p>
+      <p>MemberName : {{row.1}}</p>
+      <p>FavoriteCount : {{row.2}}</p>
+      
+      <hr>
+      {% endfor %}
+    </div>
+    <table class="table" style="width: 98%">
+      <thead class="thead-dark">
+        <tr class="active">
+          <th scope="col">PartyName</th>
+          <th scope="col">LeaderName</th>
+          <th scope="col">FavoriteCount</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -73,12 +46,10 @@
             <a href="/deleteparty/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete this party?')">Delete</a>
           </td>
         </tr>
-          {% endfor %}
+        {% endfor %}     
       </tbody>
     </table>
-    <a href="/G4" class="btn btn-primary">Add more Party</a>
-
-    </div>
+    <a href="/G4" class="btn btn-info mx-4">Add more Party</a>
 </body>
 
 </html>

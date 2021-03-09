@@ -11,11 +11,9 @@
     <h1 style="text-align:center;">Thailand Electoral 2021</h1>
     <h2 style="text-align:center;">For</h2>
     <div style="text-align: center;">
-
-        <a href="/G"><img src="Government.png" alt="GovermentClick" width="250" height="220"></a>
-        <img src="line.png" alt="line" height="220">
-        <a href="/C"><img src="Citizen.png" alt="CitizenClick" width="250" height="220"></a>
-
+        <a href="/G"><img src="{{url_for('static', filename='Government.png')}}" width="400" height="370"></a>
+        <img src="{{url_for('static', filename='line.png')}}" height="370" />
+        <a href="/C"><img src="{{url_for('static', filename='Citizen.png')}}" width="400" height="370"></a>
     </div>
 </body>
 
